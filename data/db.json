@@ -1,0 +1,230 @@
+{
+  "sellers": [
+    {
+      "id": "3bcf73c0-0ede-410f-b539-fa215fa78382",
+      "email": "okosedikenna@gmail.com",
+      "password": "okosekids",
+      "businessName": "arryona",
+      "description": "your clothing and jewelry store",
+      "contactEmail": "minimaxrift@gmail.com",
+      "location": "",
+      "category": "clothing",
+      "media": {
+        "bannerUrl": "/uploads/b39def02-59f0-44a7-a6e5-7ab6cd742a5a.jpg",
+        "videoUrl": "/uploads/c991add3-bb56-4d71-b47b-059bf25edd45.mp4"
+      },
+      "bankDetails": {},
+      "featured": true,
+      "createdAt": "2026-04-11T11:32:55.332Z"
+    },
+    {
+      "id": "39cb0ae0-9ceb-4601-bf74-e03da78c8ad9",
+      "email": "deichmannltd@gmail.com",
+      "password": "okosekids",
+      "businessName": "huebwjkew",
+      "description": " wejkc ewkj lcj ekmw",
+      "contactEmail": "deichmannltd@gmail.com",
+      "location": "evnvklet",
+      "category": "j nlkvntrlb;ntrkr ",
+      "nationality": "Nigeria",
+      "idType": "Passport",
+      "idName": "d l gkl l klr lk",
+      "verification": {
+        "status": "pending",
+        "requestedAt": "2026-04-13T21:47:53.922Z",
+        "faceVerified": false,
+        "documentVerified": false
+      },
+      "media": {
+        "passportUrl": "/uploads/39467904-1f6c-47cc-a00e-8e9773e55538.jpg"
+      },
+      "bankDetails": {},
+      "featured": true,
+      "createdAt": "2026-04-13T21:47:53.922Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "5dabeaaf-e924-471c-ac01-118c7f4d83f1",
+      "sellerId": "3bcf73c0-0ede-410f-b539-fa215fa78382",
+      "name": "jbdbdhh h",
+      "description": "jdsjkkd s kd c",
+      "price": 1,
+      "category": "clothing",
+      "imageUrls": [
+        "/uploads/ac42760a-ab59-4808-8506-caedc188c1d9.jpg"
+      ],
+      "videoUrls": [],
+      "imageUrl": "/uploads/ac42760a-ab59-4808-8506-caedc188c1d9.jpg",
+      "videoUrl": null,
+      "stock": 2,
+      "status": "live",
+      "views": 0,
+      "sizes": [
+        "XS",
+        "XXL",
+        "M"
+      ],
+      "targetDemographic": [
+        "Men",
+        "Women",
+        "Unisex"
+      ],
+      "colors": "bsj ujdbis",
+      "createdAt": "2026-04-11T19:47:23.415Z"
+    }
+  ],
+  "customers": [
+    {
+      "id": "e113c123-a606-4ee6-9b6c-77d4d8c93c32",
+      "email": "okosedikenna@gmail.com",
+      "password": "okosekids",
+      "name": "dikenna okose",
+      "createdAt": "2026-04-11T09:35:18.159Z"
+    }
+  ],
+  "chats": [
+    {
+      "id": "chat_1775867873643",
+      "createdAt": "2026-04-11T00:37:53.643Z",
+      "updatedAt": "2026-04-11T01:35:15.276Z",
+      "messages": [
+        {
+          "id": "msg_1775867873643",
+          "text": "how are you",
+          "senderType": "support",
+          "timestamp": "2026-04-11T00:37:53.643Z",
+          "status": "read",
+          "read": true
+        },
+        {
+          "id": "msg_1775867896692",
+          "text": "hiiii",
+          "senderType": "customer",
+          "timestamp": "2026-04-11T00:38:16.692Z",
+          "status": "sent",
+          "read": false
+        },
+        {
+          "id": "msg_1775867914592",
+          "text": "what is up",
+          "senderType": "support",
+          "timestamp": "2026-04-11T00:38:34.592Z",
+          "status": "read",
+          "read": true
+        },
+        {
+          "id": "msg_1775871295481",
+          "text": "hi",
+          "senderType": "customer",
+          "timestamp": "2026-04-11T01:34:55.481Z",
+          "status": "sent",
+          "read": false
+        },
+        {
+          "id": "msg_1775871313574",
+          "text": "hi",
+          "senderType": "support",
+          "timestamp": "2026-04-11T01:35:13.574Z",
+          "status": "read",
+          "read": true
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "chat_1775908065775",
+      "userIdentifier": "seller:3bcf73c0-0ede-410f-b539-fa215fa78382",
+      "userType": "seller",
+      "userFullName": "arryona",
+      "createdAt": "2026-04-11T11:47:45.775Z",
+      "updatedAt": "2026-04-11T11:47:45.775Z",
+      "messages": [],
+      "status": "open"
+    },
+    {
+      "id": "chat_1775914519714",
+      "userIdentifier": "customer:e113c123-a606-4ee6-9b6c-77d4d8c93c32",
+      "userType": "customer",
+      "userFullName": "dikenna okose",
+      "createdAt": "2026-04-11T13:35:19.714Z",
+      "updatedAt": "2026-04-11T20:12:23.458Z",
+      "messages": [
+        {
+          "id": "msg_1775915312801",
+          "text": "hi",
+          "senderType": "customer",
+          "timestamp": "2026-04-11T13:48:32.801Z",
+          "status": "sent",
+          "read": false
+        },
+        {
+          "id": "msg_1775938220715",
+          "text": "how are you",
+          "senderType": "customer",
+          "timestamp": "2026-04-11T20:10:20.715Z",
+          "status": "sent",
+          "read": false
+        },
+        {
+          "id": "msg_1775938343458",
+          "text": "hi okose",
+          "senderType": "support",
+          "timestamp": "2026-04-11T20:12:23.458Z",
+          "status": "delivered",
+          "read": false
+        }
+      ],
+      "status": "closed"
+    },
+    {
+      "id": "chat_1775937441412",
+      "userIdentifier": "guest:anonymous",
+      "userType": "guest",
+      "userFullName": "Anonymous User",
+      "createdAt": "2026-04-11T19:57:21.412Z",
+      "updatedAt": "2026-04-11T19:59:03.539Z",
+      "messages": [
+        {
+          "id": "msg_1775937543539",
+          "text": "hi",
+          "senderType": "guest",
+          "timestamp": "2026-04-11T19:59:03.539Z",
+          "status": "sent",
+          "read": false
+        }
+      ],
+      "status": "open"
+    },
+    {
+      "id": "chat_1775938485085",
+      "userIdentifier": "customer:e113c123-a606-4ee6-9b6c-77d4d8c93c32",
+      "userType": "customer",
+      "userFullName": "dikenna okose",
+      "createdAt": "2026-04-11T20:14:45.085Z",
+      "updatedAt": "2026-04-11T20:14:45.085Z",
+      "messages": [],
+      "status": "open"
+    },
+    {
+      "id": "chat_1775992632149",
+      "userIdentifier": "seller:f8e3ed23-67c4-417e-9830-e072a61a734f",
+      "userType": "seller",
+      "userFullName": "okose",
+      "createdAt": "2026-04-12T11:17:12.149Z",
+      "updatedAt": "2026-04-12T11:17:12.149Z",
+      "messages": [],
+      "status": "open"
+    },
+    {
+      "id": "chat_1776117043781",
+      "userIdentifier": "seller:39cb0ae0-9ceb-4601-bf74-e03da78c8ad9",
+      "userType": "seller",
+      "userFullName": "huebwjkew",
+      "createdAt": "2026-04-13T21:50:43.781Z",
+      "updatedAt": "2026-04-13T21:50:43.781Z",
+      "messages": [],
+      "status": "open"
+    }
+  ]
+}

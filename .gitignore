@@ -1,2 +1,7 @@
-Thumbs.db 
+Thumbs.db
 node_modules
+.next
+.env.local
+.env.production
+.env.*.local
+

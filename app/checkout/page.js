@@ -14,9 +14,6 @@ export default function CheckoutPage() {
   const [processing, setProcessing] = useState(false);
   
   const [form, setForm] = useState({
-    cardNumber: '',
-    cardExpiry: '',
-    cardCVC: '',
     billingAddress: '',
     shippingAddress: ''
   });
@@ -51,8 +48,8 @@ export default function CheckoutPage() {
   const handlePayment = async (e) => {
     e.preventDefault();
     
-    if (!form.cardNumber || !form.cardExpiry || !form.cardCVC) {
-      alert('Please fill in all payment details');
+    if (!form.shippingAddress.trim()) {
+      alert('Please enter a shipping address.');
       return;
     }
 
@@ -64,43 +61,16 @@ export default function CheckoutPage() {
     setProcessing(true);
 
     try {
-      // Validate card format (basic)
-      if (!/^\d{16}$/.test(form.cardNumber.replace(/\s/g, ''))) {
-        throw new Error('Invalid card number');
-      }
-
-      if (!/^\d{2}\/\d{2}$/.test(form.cardExpiry)) {
-        throw new Error('Invalid expiry format (use MM/YY)');
-      }
-
-      if (!/^\d{3}$/.test(form.cardCVC)) {
-        throw new Error('Invalid CVC');
-      }
-
-      // Create order
-      const order = await createOrder({
-        customerId: customer.id,
-        items: cartItems,
-        subtotal,
-        tax,
-        shipping: shippingCost,
-        total,
-        shippingAddress: form.shippingAddress,
-        billingAddress: form.billingAddress,
-        paymentMethod: 'credit_card',
-        status: 'completed',
-        cardLast4: form.cardNumber.slice(-4)
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cartItems })
       });
-
-      // Clear cart
-      localStorage.removeItem('arryona_cart');
-      window.dispatchEvent(new CustomEvent('cartUpdated', { detail: 0 }));
-
-      alert('Payment successful! Your order has been placed.');
-      router.push(`/customer/orders`);
+      const { url } = await response.json();
+      window.location.href = url;
     } catch (error) {
       console.error(error);
-      alert(error.message || 'Payment failed. Please try again.');
+      alert('Failed to start payment. Please try again.');
     } finally {
       setProcessing(false);
     }
@@ -224,64 +194,18 @@ export default function CheckoutPage() {
               {/* Payment Information */}
               <div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-3">Payment Information</h3>
-                
-                <label className="space-y-2 text-sm text-slate-700 mb-4">
-                  Card Number
-                  <input
-                    type="text"
-                    value={form.cardNumber}
-                    onChange={(e) => setForm((prev) => ({ ...prev, cardNumber: e.target.value.replace(/\D/g, '').slice(0, 16) }))}
-                    placeholder="1234 5678 9012 3456"
-                    maxLength="16"
-                    required
-                    className="w-full rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-brand-500 font-mono"
-                  />
-                </label>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <label className="space-y-2 text-sm text-slate-700">
-                    Expiry (MM/YY)
-                    <input
-                      type="text"
-                      value={form.cardExpiry}
-                      onChange={(e) => {
-                        let val = e.target.value.replace(/\D/g, '');
-                        if (val.length >= 2) {
-                          val = val.slice(0, 2) + '/' + val.slice(2, 4);
-                        }
-                        setForm((prev) => ({ ...prev, cardExpiry: val }));
-                      }}
-                      placeholder="MM/YY"
-                      maxLength="5"
-                      required
-                      className="w-full rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-brand-500 font-mono"
-                    />
-                  </label>
-                  <label className="space-y-2 text-sm text-slate-700">
-                    CVC
-                    <input
-                      type="text"
-                      value={form.cardCVC}
-                      onChange={(e) => setForm((prev) => ({ ...prev, cardCVC: e.target.value.replace(/\D/g, '').slice(0, 3) }))}
-                      placeholder="123"
-                      maxLength="3"
-                      required
-                      className="w-full rounded-3xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-brand-500 font-mono"
-                    />
-                  </label>
-                </div>
+                <p className="text-sm text-slate-600 mb-4">
+                  You'll be redirected to Stripe's secure checkout page to complete your payment.
+                </p>
               </div>
 
               <div className="pt-4 border-t border-slate-200">
-                <p className="text-xs text-slate-500 mb-4">
-                  💳 Demo mode: Use test card <strong>4242 4242 4242 4242</strong>, any future date, and any 3-digit CVC.
-                </p>
                 <button
                   type="submit"
                   disabled={processing}
                   className="w-full rounded-full bg-brand-900 px-6 py-3 text-lg font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
                 >
-                  {processing ? 'Processing...' : `Pay $${total.toFixed(2)}`}
+                  {processing ? 'Processing...' : `Pay $${total.toFixed(2)} with Stripe`}
                 </button>
               </div>
             </form>

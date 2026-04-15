@@ -76,7 +76,7 @@ export default function ProductDetailPage() {
     alert('Added to cart.');
   };
 
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     const customer = getCurrentCustomer();
     if (!customer) {
       router.push('/customer/login');
@@ -88,8 +88,24 @@ export default function ProductDetailPage() {
       return;
     }
 
-    handleAddToCart();
-    router.push('/checkout');
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [{
+            name: product.name,
+            price: Number(product.price || 0),
+            quantity: 1,
+            imageUrl: selectedMedia?.type === 'image' ? selectedMedia.url : product.imageUrl || null,
+          }]
+        })
+      });
+      const { url } = await response.json();
+      window.location.href = url;
+    } catch (error) {
+      alert('Failed to start checkout. Please try again.');
+    }
   };
 
   return (

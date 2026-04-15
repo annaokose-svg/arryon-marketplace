@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { fetchProductById, fetchShopById, getCurrentCustomer, createOrder } from '../../../lib/auth';
+import { fetchProductById, fetchShopById, getCurrentCustomer } from '../../../lib/auth';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -11,9 +11,6 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [shop, setShop] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
-  const [cartSaving, setCartSaving] = useState(false);
-  const [buying, setBuying] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -49,14 +46,15 @@ export default function ProductDetailPage() {
 
   const mediaItems = [
     ...(product.imageUrls?.map((url) => ({ type: 'image', url })) || []),
-    ...(product.videoUrls?.map((url) => ({ type: 'video', url })) || [])
+    ...(product.videoUrls?.map((url) => ({ type: 'video', url })) || []),
   ];
-  if (!mediaItems.length) {
+
+  if (mediaItems.length === 0) {
     if (product.imageUrl) mediaItems.push({ type: 'image', url: product.imageUrl });
     if (product.videoUrl) mediaItems.push({ type: 'video', url: product.videoUrl });
   }
 
-  const selectedMedia = mediaItems[selectedMediaIndex] || mediaItems[0] || null;
+  const selectedMedia = mediaItems[0] || null;
   const isSoldOut = product.stock <= 0;
 
   const handleAddToCart = () => {
@@ -70,7 +68,7 @@ export default function ProductDetailPage() {
         name: product.name,
         price: Number(product.price || 0),
         quantity: 1,
-        imageUrl: selectedMedia?.type === 'image' ? selectedMedia.url : product.imageUrl || null
+        imageUrl: selectedMedia?.type === 'image' ? selectedMedia.url : product.imageUrl || null,
       });
     }
     localStorage.setItem('arryona_cart', JSON.stringify(cart));
@@ -78,7 +76,7 @@ export default function ProductDetailPage() {
     alert('Added to cart.');
   };
 
-  const handleBuyNow = async () => {
+  const handleBuyNow = () => {
     const customer = getCurrentCustomer();
     if (!customer) {
       router.push('/customer/login');
@@ -90,28 +88,8 @@ export default function ProductDetailPage() {
       return;
     }
 
-    setBuying(true);
-    try {
-      const response = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId: product.id,
-          sellerStripeAccountId: shop?.stripeAccountId,
-        }),
-      });
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert('Failed to create checkout: ' + data.error);
-      }
-    } catch (error) {
-      console.error(error);
-      alert(error.message || 'Unable to create checkout.');
-    } finally {
-      setBuying(false);
-    }
+    handleAddToCart();
+    router.push('/checkout');
   };
 
   return (
@@ -127,7 +105,7 @@ export default function ProductDetailPage() {
         {shop ? (
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="text-xs uppercase tracking-wide text-slate-500">Sold by</p>
-              <Link href={'/shop/' + shop.id} className="mt-2 block text-lg font-semibold text-slate-900 hover:text-brand-700">
+            <Link href={'/shop/' + shop.id} className="mt-2 block text-lg font-semibold text-slate-900 hover:text-brand-700">
               {shop.businessName}
             </Link>
             <p className="mt-2 text-sm text-slate-600">{shop.location || 'Location not set'}</p>
@@ -143,99 +121,60 @@ export default function ProductDetailPage() {
                 selectedMedia.type === 'video' ? (
                   <video src={selectedMedia.url} controls className="h-96 w-full object-cover" />
                 ) : (
-                  <img
-                    src={selectedMedia.url}
-                    alt={product.name}
-                    className="h-96 w-full object-cover"
-                  />
+                  <img src={selectedMedia.url} alt={product.name} className="h-96 w-full object-cover" />
                 )
               ) : (
                 <div className="flex h-96 items-center justify-center text-slate-400">No media available</div>
               )}
             </div>
-            {mediaItems.length > 1 ? (
-              <div className="grid grid-cols-4 gap-3">
-                {mediaItems.map((media, index) => (
-                  <button
-                    key={media.type + '-' + media.url + '-' + index}
-                    type="button"
-                    onClick={() => setSelectedMediaIndex(index)}
-                    className={
-                      selectedMediaIndex === index
-                        ? 'overflow-hidden rounded-3xl border p-1 transition border-brand-700 bg-brand-50'
-                        : 'overflow-hidden rounded-3xl border p-1 transition border-slate-200 bg-white'
-                    }
-                  >
-                    {media.type === 'video' ? (
-                      <div className="relative h-24 w-full bg-slate-100 flex items-center justify-center text-xs text-slate-500">Video</div>
-                    ) : (
-                      <img src={media.url} alt={product.name + ' thumbnail'} className="h-24 w-full object-cover" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            ) : null}
           </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900">Product details</h2>
-                <dl className="mt-6 space-y-4 text-sm text-slate-600">
-                  <div>
-                    <dt className="font-semibold text-slate-900">Price</dt>
-                    <dd className="mt-1 text-lg font-semibold text-brand-900">${Number(product.price || 0).toFixed(2)}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-semibold text-slate-900">Category</dt>
-                    <dd className="mt-1">{product.category || 'General'}</dd>
-                  </div>
-                  <div>
-                    <dt className="font-semibold text-slate-900">Stock</dt>
-                    <dd className="mt-1">{product.stock !== undefined ? `${product.stock} available` : 'Not tracked'}</dd>
-                  </div>
-                  {product.colors ? (
-                    <div>
-                      <dt className="font-semibold text-slate-900">Colors</dt>
-                      <dd className="mt-2 flex flex-wrap gap-2">
-                        {product.colors.split(',').map((color) => (
-                          <span key={color.trim()} className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase text-slate-600">
-                            {color.trim()}
-                          </span>
-                        ))}
-                      </dd>
-                    </div>
-                  ) : null}
-                </dl>
-              </div>
-
-              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 className="text-xl font-semibold text-slate-900">Attributes</h2>
-                <div className="mt-6 space-y-4 text-sm text-slate-600">
-                  {product.sizes?.length ? (
-                    <div>
-                      <p className="font-semibold text-slate-900">Sizes</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {product.sizes.map((size) => (
-                          <span key={size} className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase text-slate-600">
-                            {size}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
-                  {product.targetDemographic?.length ? (
-                    <div>
-                      <p className="font-semibold text-slate-900">Target demographic</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {product.targetDemographic.map((item) => (
-                          <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase text-slate-600">
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold text-slate-900">Product details</h2>
+              <dl className="mt-6 space-y-4 text-sm text-slate-600">
+                <div>
+                  <dt className="font-semibold text-slate-900">Price</dt>
+                  <dd className="mt-1 text-lg font-semibold text-brand-900">${Number(product.price || 0).toFixed(2)}</dd>
                 </div>
+                <div>
+                  <dt className="font-semibold text-slate-900">Category</dt>
+                  <dd className="mt-1">{product.category || 'General'}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate-900">Stock</dt>
+                  <dd className="mt-1">{product.stock !== undefined ? product.stock + ' available' : 'Not tracked'}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-semibold text-slate-900">Attributes</h2>
+              <div className="mt-6 space-y-4 text-sm text-slate-600">
+                {product.sizes?.length ? (
+                  <div>
+                    <p className="font-semibold text-slate-900">Sizes</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {product.sizes.map((size) => (
+                        <span key={size} className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase text-slate-600">
+                          {size}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                {product.targetDemographic?.length ? (
+                  <div>
+                    <p className="font-semibold text-slate-900">Target demographic</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {product.targetDemographic.map((item) => (
+                        <span key={item} className="rounded-full bg-slate-100 px-3 py-1 text-xs uppercase text-slate-600">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
@@ -249,7 +188,7 @@ export default function ProductDetailPage() {
                 <p className="text-sm text-slate-500">Price</p>
                 <p className="text-3xl font-semibold text-brand-900">${Number(product.price || 0).toFixed(2)}</p>
               </div>
-              <span className={`rounded-full px-3 py-1 text-xs uppercase ${isSoldOut ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
+              <span className={isSoldOut ? 'rounded-full bg-red-100 px-3 py-1 text-xs uppercase text-red-700' : 'rounded-full bg-emerald-100 px-3 py-1 text-xs uppercase text-emerald-700'}>
                 {isSoldOut ? 'Sold Out' : 'In stock'}
               </span>
             </div>
@@ -257,7 +196,7 @@ export default function ProductDetailPage() {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                disabled={isSoldOut || cartSaving}
+                disabled={isSoldOut}
                 className="w-full rounded-full bg-brand-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
               >
                 Add to cart
@@ -265,10 +204,10 @@ export default function ProductDetailPage() {
               <button
                 type="button"
                 onClick={handleBuyNow}
-                disabled={isSoldOut || buying}
+                disabled={isSoldOut}
                 className="w-full rounded-full border border-brand-900 bg-white px-6 py-3 text-sm font-semibold text-brand-900 transition hover:bg-brand-50 disabled:opacity-50"
               >
-                {buying ? 'Processing…' : 'Buy now'}
+                Buy now
               </button>
             </div>
           </div>
@@ -276,7 +215,7 @@ export default function ProductDetailPage() {
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
               <p className="text-sm font-semibold text-slate-900">Shop preview</p>
               <p className="mt-3 text-sm text-slate-600">Explore more items from this seller or contact them directly from the shop page.</p>
-              <Link href={`/shop/${shop.id}`} className="mt-5 inline-flex rounded-full bg-brand-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700">
+              <Link href={'/shop/' + shop.id} className="mt-5 inline-flex rounded-full bg-brand-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700">
                 View shop
               </Link>
             </div>

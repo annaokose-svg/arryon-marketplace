@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export default function HomePage() {
   return (
@@ -13,13 +13,13 @@ export default function HomePage() {
               Build a verified seller presence with a real public storefront.
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-slate-600">
-              Arryona helps independent UK merchants launch an online store, accept secure Stripe payments, and showcase products with business details and media-rich profiles.
+              Arryona helps independent UK merchants launch an online store, accept secure payments, and showcase products with business details and media-rich profiles.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/products" className="rounded-full bg-brand-900 px-6 py-3 text-white transition hover:bg-brand-700">
                 Browse Marketplace
               </Link>
-              <Link href="/customer/signup" className="rounded-full border border-slate-200 bg-white px-6 py-3 text-slate-900 transition hover:border-brand-700">
+              <Link href="/seller/signup" className="rounded-full border border-slate-200 bg-white px-6 py-3 text-slate-900 transition hover:border-brand-700">
                 Start Selling
               </Link>
             </div>
@@ -27,10 +27,10 @@ export default function HomePage() {
 
           <section className="space-y-6 rounded-[32px] border border-slate-200 bg-white p-10 shadow-sm">
             <div className="space-y-3">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-700">Verified selling powered by Stripe</p>
-              <h2 className="text-2xl font-semibold text-slate-900">Secure payouts & real business verification</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-700">Verified selling made simple</p>
+              <h2 className="text-2xl font-semibold text-slate-900">Secure payouts and reliable business storefronts</h2>
               <p className="text-slate-600">
-                Sellers connect their bank account through Stripe Connect, completing identity verification and enabling compliant payouts.
+                Sellers can build their online presence, accept customer payments, and manage product listings from one easy-to-use marketplace.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -53,7 +53,7 @@ export default function HomePage() {
           </div>
           <div className="rounded-[32px] bg-white p-10 shadow-sm">
             <h3 className="text-xl font-semibold text-slate-900">What we offer</h3>
-            <p className="mt-4 text-slate-600">A public storefront platform for sellers, buyer discovery, and Stripe-powered payments.</p>
+            <p className="mt-4 text-slate-600">A public storefront platform for sellers, buyer discovery, and checkout-ready listings.</p>
           </div>
           <div className="rounded-[32px] bg-white p-10 shadow-sm">
             <h3 className="text-xl font-semibold text-slate-900">Contact</h3>
@@ -64,14 +64,14 @@ export default function HomePage() {
         <section className="mt-24 rounded-[32px] border border-slate-200 bg-white p-10 shadow-sm">
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
-              <h2 className="text-3xl font-semibold text-slate-900">A public business website for Stripe verification</h2>
+              <h2 className="text-3xl font-semibold text-slate-900">A public business website for live marketplace launch</h2>
               <p className="mt-4 text-slate-600">
-                This site is designed to be live, public, and ready to support Stripe onboarding with a valid business name, contact details, and storefront links.
+                This site is designed to be live, public, and ready to support online sales with a business name, contact details, and storefront links.
               </p>
               <ul className="mt-8 space-y-4 text-slate-600">
                 <li>• Publicly viewable business landing page</li>
                 <li>• Marketplace navigation for customers and sellers</li>
-                <li>• Stripe Connect onboarding for live banking</li>
+                <li>• Live payment-ready listings for buyer checkout</li>
               </ul>
             </div>
             <div className="space-y-6 rounded-3xl bg-brand-50 p-8">
@@ -91,10 +91,10 @@ export default function HomePage() {
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-300">Ready to deploy</p>
-              <h2 className="mt-4 text-3xl font-semibold">Deploy to a public domain for Stripe live verification</h2>
+              <h2 className="mt-4 text-3xl font-semibold">Deploy to a public domain for live verification</h2>
             </div>
             <div className="space-y-4">
-              <p className="text-slate-200">This site can be deployed to a hosting provider such as Netlify or Vercel. Once live, Stripe will be able to verify it as your official business website.</p>
+              <p className="text-slate-200">This site can be deployed to a hosting provider such as Netlify or Vercel. Once live, customers can discover your storefront and make purchases.</p>
               <Link href="/products" className="inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                 View Marketplace
               </Link>

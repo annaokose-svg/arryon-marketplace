@@ -32,7 +32,7 @@ npm run dev
 - All pages and forms work locally through Next.js API routes.
 
 ## Production deployment
-- The root homepage is now a public business landing page suitable for Stripe verification.
+- The root homepage is now a public business landing page suitable for a live storefront.
 - Deploy to a public hosting provider such as Netlify or Vercel.
 - Use `npm run build` to build the app and `npm start` to run it in production.
 - Set your production domain in `.env.production` as `NEXT_PUBLIC_BASE_URL=https://your-production-domain.com`.
@@ -40,6 +40,7 @@ npm run dev
 ## Netlify deployment
 - This local data backend is intended for development only.
 - If you deploy to Netlify, you will need to replace the local JSON persistence with a production backend such as Firebase, Supabase, or a custom database.
+- Netlify is configured with `netlify.toml` and `@netlify/plugin-nextjs`.
 - Set build command to `npm run build`.
 - Set publish directory to `.next`.
 

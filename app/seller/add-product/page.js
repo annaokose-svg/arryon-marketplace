@@ -22,6 +22,7 @@ export default function AddProductPage() {
     colors: ''
   });
   const [saving, setSaving] = useState(false);
+  const [showFeeDisclosure, setShowFeeDisclosure] = useState(false);
 
 
 
@@ -43,13 +44,18 @@ export default function AddProductPage() {
     return data.url;
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (!seller) {
       alert('You must be signed in as a seller to add products.');
       return;
     }
+    setShowFeeDisclosure(true);
+  };
+
+  const handleConfirmSubmit = async () => {
     setSaving(true);
+    setShowFeeDisclosure(false);
 
     try {
       const imageUrls = await Promise.all(
@@ -278,6 +284,37 @@ export default function AddProductPage() {
           </div>
         </aside>
       </div>
+
+      {showFeeDisclosure && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="mx-4 max-w-md rounded-3xl bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-slate-900">Platform Fees</h3>
+            <p className="mt-3 text-sm text-slate-600">
+              Arryona Marketplace charges a 10% platform fee on all sales. This helps us maintain the platform and provide services to sellers.
+            </p>
+            <div className="mt-4 rounded-lg bg-slate-50 p-4">
+              <p className="text-sm text-slate-600">Product Price: ${parseFloat(form.price || '0').toFixed(2)}</p>
+              <p className="text-sm text-slate-600">Platform Fee (10%): ${(parseFloat(form.price || '0') * 0.1).toFixed(2)}</p>
+              <p className="text-sm font-semibold text-slate-900">You'll receive: ${(parseFloat(form.price || '0') * 0.9).toFixed(2)}</p>
+            </div>
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={() => setShowFeeDisclosure(false)}
+                className="flex-1 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmSubmit}
+                disabled={saving}
+                className="flex-1 rounded-full bg-brand-900 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
+              >
+                {saving ? 'Publishing...' : 'Publish Product'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

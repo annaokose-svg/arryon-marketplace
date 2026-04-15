@@ -38,6 +38,11 @@ export async function POST(request) {
     return NextResponse.json({ error: 'A seller with that business name already exists.' }, { status: 409 });
   }
 
+  // Check if email is verified
+  if (!db.verifiedEmails || !db.verifiedEmails.includes(email)) {
+    return NextResponse.json({ error: 'Email not verified. Please verify your email first.' }, { status: 400 });
+  }
+
   const id = crypto.randomUUID();
   const seller = {
     id,

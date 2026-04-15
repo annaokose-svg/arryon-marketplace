@@ -59,7 +59,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 border-t border-slate-200 pt-8 text-center text-sm text-slate-500">
-          <p>&copy; 2026 Arryona Marketplace. All rights reserved.</p>
+          <p>&copy; 2026 Arryona Marketplace. All rights reserved. Made by Dikenna Okose.</p>
         </div>
       </div>
     </footer>
